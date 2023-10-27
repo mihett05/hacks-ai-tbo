@@ -31,7 +31,7 @@ def sample_to_coco(sample_name: str, output: io.IOBase):
         result["annotations"] = [
             {
                 "id": i + 1,
-                "image_id": int(image_id),
+                "image_id": str(int(image_id)),
                 "category_id": int(category_id),
                 "bbox": [x * image_w, y * image_h, w * image_w, h * image_h],
                 "iscrowd": 0,
