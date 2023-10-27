@@ -1,4 +1,5 @@
 from parser import coco
 
-with open("output.json", "w") as f:
-    coco.sample_to_coco("video0", f)
+for sample in ["video0", "video1", "video2"]:
+    with open(f"dataset/{sample}.json", "w") as f:
+        coco.sample_to_coco(sample, f)
