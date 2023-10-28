@@ -9,9 +9,14 @@ model = YOLO(Path(__file__).parent.parent / "yolo_v8x.pt")
 classes = ["wood", "glass", "plastic", "metal"]
 
 
-def process_sample(sample_path: Path, future: bool = False):
+def process_sample(
+    sample_path: Path,
+    future: bool = False,
+    output_dir: str = "output",
+    output_file="result.txt",
+):
     images_path = sample_path / "frames_rgb"
-    output_path = sample_path / "output"
+    output_path = sample_path / output_dir
     items = {i: set() for i in range(len(classes))}
     if not output_path.exists():
         os.mkdir(output_path)
@@ -53,5 +58,5 @@ def process_sample(sample_path: Path, future: bool = False):
 
         with open(output_path / (image_name.split(".")[0] + ".txt"), "w") as f:
             f.write("\n".join(map(str, local)) + "\n")
-    with open(sample_path / "result.txt", "w") as f:
+    with open(sample_path / output_file, "w") as f:
         f.write("\n".join([str(len(items[key])) for key in items.keys()]) + "\n")
