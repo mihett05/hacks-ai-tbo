@@ -15,7 +15,7 @@ def sample_to_coco(sample_name: str, output: io.IOBase):
 
     result["images"] = [
         {
-            "id": str(i),
+            "id": f"{sample_name}_{i}",
             "file_name": str(
                 (sample_path / "frame_ms" / file).relative_to(
                     Path(__file__).parent.parent
@@ -31,7 +31,7 @@ def sample_to_coco(sample_name: str, output: io.IOBase):
         result["annotations"] = [
             {
                 "id": i + 1,
-                "image_id": str(int(image_id)),
+                "image_id": f"{sample_name}_{int(image_id)}",
                 "category_id": int(category_id),
                 "bbox": [
                     (x - w / 2) * image_w,
@@ -53,3 +53,18 @@ def sample_to_coco(sample_name: str, output: io.IOBase):
         ]
 
     json.dump(result, output, indent=2)
+
+
+def merge_coco(files: list[io.IOBase], output: io.IOBase):
+    offset = 0
+    result = {
+        "images": [],
+        "annotations": [],
+    }
+    for sample in [json.load(file) for file in files]:
+        result["images"] += sample["images"]
+        result["annotations"] += [
+            {**a, "id": offset + a["id"]} for a in sample["annotations"]
+        ]
+        offset += int(sample["annotations"][-1]["id"]) + 1
+    json.dump(result, output)
