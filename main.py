@@ -1,9 +1,16 @@
 from ultralytics import YOLO
+from ultralytics.models.yolo.detect.predict import Results
+from pathlib import Path
+from counter.counter import count_frame, count_frames
+from test.frames import test_frames
 
-# model = YOLO("yolov8n.pt")
+# model = YOLO("runs/detect/train/weights/best.pt")
 #
 # result = model.train(data="data.yaml", epochs=1)
 # print(result)
 
-model = YOLO("runs/detect/train/weights/last.pt")
-model.predict("train_dataset_dataset/video0/frames_rgb/0000.png", save=True)
+
+# sample_name = "video0"
+
+# count_frames(Path("train_dataset_dataset/video0"))
+test_frames(Path("train_dataset_dataset/video0"))
