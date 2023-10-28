@@ -5,6 +5,7 @@ from pathlib import Path
 
 def metrics(sample_path: Path):
     _, _, files = list(os.walk(sample_path / "output"))[0]
+    files.sort()
     passed = 0
     expected = [[] for _ in range(4)]
     predicted = [[] for _ in range(4)]
@@ -23,7 +24,7 @@ def metrics(sample_path: Path):
             else:
                 diff = np.array(exp) - np.array(real)
                 classes = ["wood", "glass", "plastic", "metal"]
-                print(file, *[f"{classes[i]}: {diff[i]}" for i in range(4) if diff[i]])
+                # print(file, *[f"{classes[i]}: {diff[i]}" for i in range(4) if diff[i]])
     print(f"{passed}/{len(files)}")
 
     m1 = sum([rmsd(predicted[i], expected[i]) for i in range(4)]) / 4

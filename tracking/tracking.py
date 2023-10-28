@@ -4,31 +4,46 @@ import numpy as np
 from pathlib import Path
 from ultralytics import YOLO
 
-model = YOLO(Path(__file__).parent.parent / "yolo_v8n.pt")
+model = YOLO(Path(__file__).parent.parent / "yolo_v8x.pt")
 
 classes = ["wood", "glass", "plastic", "metal"]
-
-items = {i: set() for i in range(len(classes))}
 
 
 def process_sample(sample_path: Path, future: bool = False):
     images_path = sample_path / "frames_rgb"
     output_path = sample_path / "output"
+    items = {i: set() for i in range(len(classes))}
     if not output_path.exists():
         os.mkdir(output_path)
     for image_name in sorted(os.listdir(images_path)):
         image = cv.imread(str(images_path / image_name))
+        parts = [28, 14]
         if future:
-            if (images_path / f"{int(image_name.split('.')[0]) + 2:04}.png").exists():
-                image1 = cv.imread(
+            image1 = (
+                cv.imread(
                     str(images_path / f"{int(image_name.split('.')[0]) + 1:04}.png")
                 )
-                image2 = cv.imread(
+                if (
+                    images_path / f"{int(image_name.split('.')[0]) + 1:04}.png"
+                ).exists()
+                else np.ones(
+                    (image.shape[0], sum(parts), image.shape[2]), dtype=np.uint8
+                )
+            )
+            image2 = (
+                cv.imread(
                     str(images_path / f"{int(image_name.split('.')[0]) + 2:04}.png")
                 )
-                image = np.hstack((image2[:, 14:28], image1[:, :28], image))
-            else:
-                break
+                if (
+                    images_path / f"{int(image_name.split('.')[0]) + 2:04}.png"
+                ).exists()
+                else np.ones(
+                    (image.shape[0], sum(parts), image.shape[2]), dtype=np.uint8
+                )
+            )
+            image = np.hstack(
+                (image2[:, parts[1] : parts[0]], image1[:, : parts[0]], image)
+            )
         results = model.track(image, persist=True)
         local = [0] * 4
         for i, key in enumerate(map(int, results[0].boxes.id)):

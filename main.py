@@ -13,5 +13,10 @@ from tracking.tracking import process_sample
 # sample_name = "video0"
 
 # count_frames(Path("train_dataset_dataset/video0"))
-process_sample(Path(__file__).parent / "train_dataset_dataset" / "video0", future=True)
-print(metrics(Path("train_dataset_dataset/video0")))
+for sample in ["video0", "video1", "video2"]:
+    process_sample(
+        Path(__file__).parent / "train_dataset_dataset" / sample, future=True
+    )
+
+for sample in ["video0", "video1", "video2"]:
+    print(metrics(Path(f"train_dataset_dataset/{sample}")))

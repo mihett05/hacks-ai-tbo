@@ -3,23 +3,30 @@ import cv2 as cv
 import numpy as np
 from ultralytics import YOLO
 
-model = YOLO("../yolo_v8n.pt")
+model = YOLO("../yolo_v8x.pt")
 
 classes = ["wood", "glass", "plastic", "metal"]
 
-for image_name in sorted(os.listdir("../train_dataset_dataset/video1/frames_rgb")):
-    image = cv.imread(f"../train_dataset_dataset/video1/frames_rgb/{image_name}")
+start = 0
+
+sample_name = "video0"
+
+for image_name in sorted(
+    os.listdir(f"../train_dataset_dataset/{sample_name}/frames_rgb")
+)[start:]:
+    image = cv.imread(f"../train_dataset_dataset/{sample_name}/frames_rgb/{image_name}")
     image1 = cv.imread(
-        f"../train_dataset_dataset/video1/frames_rgb/{int(image_name.split('.')[0]) + 1:04}.png"
+        f"../train_dataset_dataset/{sample_name}/frames_rgb/{int(image_name.split('.')[0]) + 1:04}.png"
     )
     image2 = cv.imread(
-        f"../train_dataset_dataset/video1/frames_rgb/{int(image_name.split('.')[0]) + 2:04}.png"
+        f"../train_dataset_dataset/{sample_name}/frames_rgb/{int(image_name.split('.')[0]) + 2:04}.png"
     )
     image = np.hstack((image2[:, 14:28], image1[:, :28], image))
     results = model.track(image, persist=True)
+    print(image_name)
 
     with open(
-        f"../train_dataset_dataset/new/video1/labels/{image_name.split('.')[0]}.txt"
+        f"../train_dataset_dataset/new/{sample_name}/labels/{image_name.split('.')[0]}.txt"
     ) as f:
         labels = [
             (int(line.split()[0]), *tuple(map(float, line.split()[1:])))
