@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 from shutil import copyfile
+from random import shuffle
 
 dataset_path = Path(__file__).parent.parent / "train_dataset_dataset"
 crop_dataset_path = dataset_path / "crop_dataset"
@@ -93,14 +94,34 @@ def merge_datasets_from_new(result_sample: str):
         labels += [
             str(dataset_path / "new" / d / "labels" / file) for file in sorted(files)
         ]
+    images = {i: path for i, path in enumerate(images)}
+    labels = {i: path for i, path in enumerate(labels)}
     images_p = result / "images"
     labels_p = result / "labels"
+    if not images_p.exists():
+        os.mkdir(images_p)
+    if not labels_p.exists():
+        os.mkdir(labels_p)
 
-    os.mkdir(images_p)
-    os.mkdir(labels_p)
+    folders = {
+        "train": int(0.7 * len(images)),
+        "val": int(0.1 * len(images)),
+        "test": int(0.2 * len(images)),
+    }
 
-    for i in range(len(images)):
-        copyfile(images[i], images_p / f"{i:04}.png")
+    for folder in folders:
+        for path in [images_p, labels_p]:
+            if not (path / folder).exists():
+                os.mkdir(path / folder)
 
-    for i in range(len(labels)):
-        copyfile(labels[i], labels_p / f"{i:04}.txt")
+    keys = list(images.keys())
+    shuffle(keys)
+    for key in keys:
+        result_folder = [folder for folder in folders if folders[folder] > 0]
+        if result_folder:
+            result_folder = result_folder[0]
+            folders[result_folder] -= 1
+        else:
+            result_folder = "train"
+        copyfile(images[key], images_p / result_folder / f"{key:04}.png")
+        copyfile(labels[key], labels_p / result_folder / f"{key:04}.txt")
