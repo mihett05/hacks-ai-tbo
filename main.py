@@ -1,8 +1,8 @@
 from ultralytics import YOLO
 from ultralytics.models.yolo.detect.predict import Results
 from pathlib import Path
-from counter.counter import count_frame, count_frames
-from test.frames import test_frames
+from test.frames import metrics
+from tracking.tracking import process_sample
 
 # model = YOLO("runs/detect/train/weights/best.pt")
 #
@@ -13,4 +13,5 @@ from test.frames import test_frames
 # sample_name = "video0"
 
 # count_frames(Path("train_dataset_dataset/video0"))
-test_frames(Path("train_dataset_dataset/video0"))
+process_sample(Path(__file__).parent / "train_dataset_dataset" / "video0", future=True)
+print(metrics(Path("train_dataset_dataset/video0")))
