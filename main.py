@@ -1,12 +1,9 @@
-from parser import coco
+from ultralytics import YOLO
 
-samples = ["video0", "video1", "video2"]
-for sample in samples:
-    with open(f"dataset/{sample}.json", "w") as f:
-        coco.sample_to_coco(sample, f)
+# model = YOLO("yolov8n.pt")
+#
+# result = model.train(data="data.yaml", epochs=1)
+# print(result)
 
-files = [open(f"dataset/{sample}.json") for sample in samples]
-with open(f"dataset/video.json", "w") as f:
-    coco.merge_coco(files, f)
-for file in files:
-    file.close()
+model = YOLO("runs/detect/train/weights/last.pt")
+model.predict("train_dataset_dataset/video0/frames_rgb/0000.png", save=True)

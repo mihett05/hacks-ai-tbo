@@ -1,0 +1,9 @@
+path: ./train_dataset_dataset
+train: new_video0
+val: new_video1
+
+names:
+  0: wood
+  1: glass
+  2: plastic
+  3: metal

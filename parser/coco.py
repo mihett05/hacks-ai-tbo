@@ -10,12 +10,12 @@ dataset_path = Path(__file__).parent.parent / "train_dataset_dataset"
 def sample_to_coco(sample_name: str, output: io.IOBase):
     result = {}
     sample_path = dataset_path / sample_name
-    _, _, files = list(os.walk(sample_path / "frames_ms"))[0]
+    _, _, files = list(os.walk(sample_path / "frames_rgb"))[0]
     image_h, image_w, _ = cv2.imread(str(sample_path / "frames_rgb" / "0000.png")).shape
 
     result["images"] = [
         {
-            "id": f"{sample_name}_{i}",
+            "id": i,
             "file_name": str(
                 (sample_path / "frame_ms" / file).relative_to(
                     Path(__file__).parent.parent
@@ -30,8 +30,8 @@ def sample_to_coco(sample_name: str, output: io.IOBase):
     with open(sample_path / f"{sample_name}.txt") as f:
         result["annotations"] = [
             {
-                "id": i + 1,
-                "image_id": f"{sample_name}_{int(image_id)}",
+                "id": int(i + 1),
+                "image_id": int(image_id),
                 "category_id": int(category_id),
                 "bbox": [
                     (x - w / 2) * image_w,
