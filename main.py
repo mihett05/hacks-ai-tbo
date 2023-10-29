@@ -1,7 +1,4 @@
-from ultralytics import YOLO
-from ultralytics.models.yolo.detect.predict import Results
 from pathlib import Path
-from test.frames import metrics
 from tracking.tracking import process_sample
 
 # model = YOLO("runs/detect/train/weights/best.pt")
