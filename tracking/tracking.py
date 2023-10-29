@@ -4,7 +4,7 @@ import numpy as np
 from pathlib import Path
 from ultralytics import YOLO
 
-model = YOLO(Path(__file__).parent.parent / "yolo_v8x.pt")
+model = YOLO(Path(__file__).parent.parent / "yolo_v8l.pt")
 
 classes = ["wood", "glass", "plastic", "metal"]
 
