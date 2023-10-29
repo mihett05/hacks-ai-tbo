@@ -30,7 +30,7 @@
 8. `train.ipynb` - jupyter notebook для тренировки модели
 
 ## Где взять модель YOLO?
-В разделе Github Releases можно скачать файл `yolo_v8l.pt`. Его необходимо положить в корневую директорию
+В разделе [Github Releases](https://github.com/mihett05/hacks-ai-tbo/releases/download/model/yolo_v8l.pt) можно скачать файл `yolo_v8l.pt`. Его необходимо положить в корневую директорию
 
 ## Куда положить видео для анализа?
 В папку `train_dataset_dataset` положить папку видео, затем укажите это название при запуске программы
