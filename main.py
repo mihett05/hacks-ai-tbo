@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from tracking.tracking import process_sample
 
@@ -17,10 +18,10 @@ from tracking.tracking import process_sample
 #
 # for sample in ["video0", "video1", "video2"]:
 #     print(metrics(Path(f"train_dataset_dataset/{sample}")))
-
+os.system("cls")
 sample_name = input("Укажите название папки с видео в папке train_dataset_dataset: ")
 process_sample(
-    Path(__file__).parent / "train_dataset_dataset" / sample_name,
+    Path.cwd() / "train_dataset_dataset" / sample_name,
     future=True,
     output_dir="frames_output",
     output_file="output.txt",
